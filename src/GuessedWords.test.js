@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { findByTestAttr, checkProps } from './test/utils';
 
-import GuessedWord from './GuessedWord';
+import GuessedWord from './GuessedWords';
 
 const defaultProps = {
 	guessedWords: [ { guessedWord: 'train', letterMatchCount: 3 } ]
