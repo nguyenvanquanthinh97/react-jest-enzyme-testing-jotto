@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 
 import { getSecretWord } from './actions';
 import { storeFactory } from './test/utils';
-import App from './App';
+import App, { UnconnectedApp } from './App';
 
 /**
  * This setup function will return shallow wrapper of App
@@ -35,4 +35,26 @@ describe('check redux props', () => {
 		const wrapper = setup({ secretWord });
 		expect(wrapper.instance().props.secretWord).toBe(secretWord);
 	});
+});
+
+test('`getSecretWord` runs on App mount', () => {
+	//create getSecretMock
+	const getSecretWordMock = jest.fn();
+	
+	const props = {
+		getSecretWord: getSecretWordMock,
+		success: false,
+		guessedWords: [ { guessedWord: 'train', letterMatchCount: 3 } ]
+	};
+
+	//let App using getSecretMock
+	const wrapper = shallow(<UnconnectedApp {...props} />);
+
+	//invoke componentDidMount() on App
+	wrapper.instance().componentDidMount();
+
+	//check to see how many time mock ran (if mock can run)
+	const getSecretWordCount = getSecretWordMock.mock.calls.length;
+
+	expect(getSecretWordCount).toBe(1);
 });
