@@ -1,8 +1,8 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 
 import { findByTestAttr, storeFactory } from './test/utils';
-import Input from './Input';
+import Input, { UnconnectedInput } from './Input';
 
 /**
  * @function setup
@@ -62,7 +62,7 @@ describe('render', () => {
 });
 
 /**
- * return first layer of HOC (redux connect) to get its props
+ * return first layer of HOC (redux connect) to get its props (Stateless Component)
  * @param {object} initialState - initial state for Input
  * @returns {ShallowWrapper} - 1st layer of HOC of Redux Connect
  */
@@ -79,5 +79,35 @@ describe('check redux props', () => {
 	test('has "guessWord" action creator as a props', () => {
 		const wrapper = getPropsLayerWrapper();
 		expect(wrapper.props().guessWord).toBeInstanceOf(Function);
+	});
+});
+
+//At this here i have converted from stateless component into state component
+describe('test input integration with Mock functions', () => {
+	test('input invoke `guessWord` with guessWordMock with input argument as `guessedWord`', () => {
+		//create guessWordMock replacing for guessWord as piece of props
+		const guessWordMock = jest.fn();
+
+		const props = {
+			success: false,
+			guessWord: guessWordMock
+		};
+		const wrapper = mount(<UnconnectedInput {...props} />);
+
+		//find the input and simulate change it
+		const input = findByTestAttr(wrapper, 'input-box');
+		input.simulate('change', { target: { value: 'train' } });
+
+		//find form and simulate submit it
+		const inputForm = wrapper.find('form');
+		inputForm.simulate('submit');
+
+		//checking Input invokes guessWordMock
+		const guessWordMockCount = guessWordMock.mock.calls.length;
+		expect(guessWordMockCount).toBe(1);
+
+		//expect guessWordMock call with exactly argument
+		const argument = guessWordMock.mock.calls[0];
+		expect(argument).toEqual([ 'train' ]);
 	});
 });
