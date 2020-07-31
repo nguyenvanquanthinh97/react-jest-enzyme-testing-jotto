@@ -61,4 +61,23 @@ describe('render', () => {
 	});
 });
 
-describe('check state', () => {});
+/**
+ * return first layer of HOC (redux connect) to get its props
+ * @param {object} initialState - initial state for Input
+ * @returns {ShallowWrapper} - 1st layer of HOC of Redux Connect
+ */
+const getPropsLayerWrapper = (initialState = {}) => {
+	return shallow(<Input store={storeFactory(initialState)} />).dive();
+};
+
+describe('check redux props', () => {
+	test('has "success" as a props', () => {
+		const success = true;
+		const wrapper = getPropsLayerWrapper({ success });
+		expect(wrapper.props().success).toBe(success);
+	});
+	test('has "guessWord" action creator as a props', () => {
+		const wrapper = getPropsLayerWrapper();
+		expect(wrapper.props().guessWord).toBeInstanceOf(Function);
+	});
+});

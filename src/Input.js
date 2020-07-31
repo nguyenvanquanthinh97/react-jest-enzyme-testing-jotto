@@ -1,7 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-const Input = ({ success }) => {
+import { guessWord } from './actions';
+
+const Input = (props) => {
+	const { success } = props;
 	const content = success ? null : (
 		<form className="form-inline">
 			<input data-test="input-box" className="mb-2 mx-sm-3" type="text" placeholder="enter guess" />
@@ -15,4 +18,4 @@ const Input = ({ success }) => {
 
 const mapStateToProps = ({ success }) => ({ success });
 
-export default connect(mapStateToProps)(Input);
+export default connect(mapStateToProps, { guessWord })(Input);
