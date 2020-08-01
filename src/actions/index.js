@@ -8,6 +8,8 @@ export const actionTypes = {
 	SET_SECRET_WORD: 'SET_SECRET_WORD'
 };
 
+const jotto_server = 'https://random-guessed-words.herokuapp.com/';
+
 /**
  * Return Redux Thunk function that dispatches 'GUESS_WORD' and conditionally dispatch 'CORRECT_GUESS' if guessed word match with secret word
  * @param {string} guessedWord - Guessed word
@@ -35,7 +37,7 @@ export const guessWord = (guessedWord) => {
 };
 
 export const getSecretWord = () => async (dispatch) => {
-	const response = await axios.get('http://localhost:3030');
+	const response = await axios.get(jotto_server);
 	dispatch({
 		type: actionTypes.SET_SECRET_WORD,
 		payload: response.data

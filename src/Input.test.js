@@ -84,30 +84,38 @@ describe('check redux props', () => {
 
 //At this here i have converted from stateless component into state component
 describe('test input integration with Mock functions', () => {
-	test('input invoke `guessWord` with guessWordMock with input argument as `guessedWord`', () => {
+	let guessWordMock;
+	const guessedWord = 'train';
+	let wrapper;
+	beforeEach(() => {
 		//create guessWordMock replacing for guessWord as piece of props
-		const guessWordMock = jest.fn();
+		guessWordMock = jest.fn();
 
 		const props = {
 			success: false,
 			guessWord: guessWordMock
 		};
-		const wrapper = mount(<UnconnectedInput {...props} />);
+		wrapper = shallow(<UnconnectedInput {...props} />);
 
-		//find the input and simulate change it
-		const input = findByTestAttr(wrapper, 'input-box');
-		input.simulate('change', { target: { value: 'train' } });
+		//set guessedWordState
+		wrapper.setState({ currentGuess: guessedWord });
 
 		//find form and simulate submit it
 		const inputForm = wrapper.find('form');
-		inputForm.simulate('submit');
-
+		inputForm.simulate('submit', { preventDefault: () => {} });
+	});
+	test('input invoke `guessWord` with guessWordMock with input argument as `guessedWord`', () => {
 		//checking Input invokes guessWordMock
 		const guessWordMockCount = guessWordMock.mock.calls.length;
 		expect(guessWordMockCount).toBe(1);
+	});
 
-		//expect guessWordMock call with exactly argument
-		const argument = guessWordMock.mock.calls[0];
-		expect(argument).toEqual([ 'train' ]);
+	test('test Input call `guessWord` with exactly argument', () => {
+		const guessWordArg = guessWordMock.mock.calls;
+		expect(guessWordArg[0][0]).toBe(guessedWord);
+	});
+
+	test('Input field has clear text after submit', () => {
+		expect(wrapper.state('currentGuess')).toBe('');
 	});
 });

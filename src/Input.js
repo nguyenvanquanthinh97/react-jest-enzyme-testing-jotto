@@ -6,25 +6,27 @@ import { guessWord } from './actions';
 export class UnconnectedInput extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { guessedWord: '' };
+		this.state = { currentGuess: '' };
 	}
 
 	onSubmitHandler = (e) => {
 		//prevent refresh browser
 		e.preventDefault();
 
-		this.props.guessWord(this.state.guessedWord);
-		this.setState({ guessedWord: '' });
+		if (this.state.currentGuess) {
+			this.props.guessWord(this.state.currentGuess);
+			this.setState({ currentGuess: '' });
+		}
 	};
 
 	render() {
-		const { guessedWord } = this.state;
+		const { currentGuess } = this.state;
 		const { success } = this.props;
 		const content = success ? null : (
 			<form onSubmit={this.onSubmitHandler} className="form-inline">
 				<input
-					value={guessedWord}
-					onChange={(e) => this.setState({ guessedWord: e.target.value })}
+					value={currentGuess}
+					onChange={(e) => this.setState({ currentGuess: e.target.value })}
 					data-test="input-box"
 					className="mb-2 mx-sm-3"
 					type="text"
