@@ -10,6 +10,7 @@ const GuessedWord = ({ guessedWords }) => {
 		const guessedWordNodes = guessedWords.map(({ guessedWord, letterMatchCount }, idx) => {
 			return (
 				<tr key={idx} data-test="guess-word">
+					<td>{idx + 1}</td>
 					<td>{guessedWord}</td>
 					<td>{letterMatchCount}</td>
 				</tr>
@@ -23,12 +24,14 @@ const GuessedWord = ({ guessedWords }) => {
 				<table className="table table-sm">
 					<thead className="thead-light">
 						<tr>
+							<th>#</th>
 							<th>Guessed Words</th>
 							<th>Letter Match Count</th>
 						</tr>
 					</thead>
 					<tbody>{guessedWordNodes}</tbody>
 				</table>
+				<div data-test="total-guess">Total Guess: {guessedWordNodes.length}</div>
 			</div>
 		);
 	}

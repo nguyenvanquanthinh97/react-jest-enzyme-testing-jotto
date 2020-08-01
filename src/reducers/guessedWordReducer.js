@@ -11,6 +11,9 @@ export default (state = [], action) => {
 		case actionTypes.GUESS_WORD: {
 			return [ ...state, action.payload ];
 		}
+		case actionTypes.SET_SECRET_WORD: {
+			return [];
+		}
 		default:
 			return state;
 	}

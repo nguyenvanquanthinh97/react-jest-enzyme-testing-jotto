@@ -10,8 +10,9 @@ import App, { UnconnectedApp } from './App';
  * @param {object} initialState - initial state for this setup
  * @returns {ShallowWrapper}
  */
+const secretWord = 'party';
 const setup = (initialState = {}) => {
-	const wrapper = shallow(<App store={storeFactory(initialState)} />).dive().dive();
+	const wrapper = shallow(<App store={storeFactory({ secretWord, ...initialState })} />).dive().dive();
 	return wrapper;
 };
 
@@ -40,10 +41,11 @@ describe('check redux props', () => {
 test('`getSecretWord` runs on App mount', () => {
 	//create getSecretMock
 	const getSecretWordMock = jest.fn();
-	
+
 	const props = {
 		getSecretWord: getSecretWordMock,
 		success: false,
+		secretWord,
 		guessedWords: [ { guessedWord: 'train', letterMatchCount: 3 } ]
 	};
 

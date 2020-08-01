@@ -119,3 +119,25 @@ describe('test input integration with Mock functions', () => {
 		expect(wrapper.state('currentGuess')).toBe('');
 	});
 });
+
+describe('giveUp button', () => {
+	let wrapper, getSecretWordMock;
+	beforeEach(() => {
+		getSecretWordMock = jest.fn();
+		const props = {
+			success: false,
+			guessedWords: [ { guessedWord: 'train', letterMatchCount: 3 } ]
+		};
+		wrapper = shallow(<UnconnectedInput {...props} />);
+	});
+	test('render if success is false and guessedWords.length > 0', () => {
+		const giveUpButton = findByTestAttr(wrapper, 'give-up-button');
+		expect(giveUpButton.length).toBe(1);
+	});
+	test('render reset button and failing message after clicking giveUpButton', () => {
+		//find giveUPButton and simulate clicking it
+		const giveUpButton = findByTestAttr(wrapper, 'give-up-button');
+		giveUpButton.simulate('click');
+		 
+	})
+});
