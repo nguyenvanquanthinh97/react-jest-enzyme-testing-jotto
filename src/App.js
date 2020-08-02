@@ -6,7 +6,7 @@ import GuessedWords from './GuessedWords';
 
 function App() {
 	return (
-		<div className="container text-center">
+		<div className="container text-center" data-test="component-app">
 			<h1>Jotto</h1>
 			<Congrats success />
 			<GuessedWords
