@@ -6,11 +6,15 @@ const Input = (props) => {
 
 	const onFormSubmitClick = (e) => {
 		e.preventDefault();
+
+		//	TODO: invoke guessWord to optionally update `success`
+		//	TODO: update `guessedWords` context
+		setCurrentGuess('');
 	};
 
 	return (
 		<div data-test="component-input">
-			<form onSubmit={onFormSubmitClick} className="inline">
+			<form onSubmit={onFormSubmitClick} className="inline" data-test="form">
 				<input
 					value={currentGuess}
 					onChange={(e) => setCurrentGuess(e.target.value)}

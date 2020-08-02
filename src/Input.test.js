@@ -33,17 +33,30 @@ test('passing props as propTypes condition in Input', () => {
 });
 
 describe('state control input field', () => {
-	test('state updates with value of input box change with `setCurrentGuess`', () => {
-		const currentGuess = 'train';
-		const mockSetCurrentGuess = jest.fn();
+	const currentGuess = 'train';
+	const mockSetCurrentGuess = jest.fn();
+	let wrapper;
+
+	beforeEach(() => {
+		mockSetCurrentGuess.mockClear();
 		React.useState = jest.fn(() => [ '', mockSetCurrentGuess ]);
 
-		const wrapper = setup();
+		wrapper = setup();
+	});
 
+	test('state updates with value of input box change with `setCurrentGuess`', () => {
 		//find input box and simuate change it
 		const inputBox = findByTestAttr(wrapper, 'input-box');
 		inputBox.simulate('change', { target: { value: currentGuess } });
 
 		expect(mockSetCurrentGuess).toHaveBeenCalledWith(currentGuess);
+	});
+
+	test('field is clear when form is submitted', () => {
+		//find input box and simuate submit it
+		const form = findByTestAttr(wrapper, 'form');
+		form.simulate('submit', { preventDefault: () => {} });
+
+		expect(mockSetCurrentGuess).toHaveBeenCalledWith('');
 	});
 });
