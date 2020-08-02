@@ -31,3 +31,19 @@ test('passing props as propTypes condition in Input', () => {
 	const props = { secretWord: 'party' };
 	checkProps(Input, props);
 });
+
+describe('state control input field', () => {
+	test('state updates with value of input box change with `setCurrentGuess`', () => {
+		const currentGuess = 'train';
+		const mockSetCurrentGuess = jest.fn();
+		React.useState = jest.fn(() => [ '', mockSetCurrentGuess ]);
+
+		const wrapper = setup();
+
+		//find input box and simuate change it
+		const inputBox = findByTestAttr(wrapper, 'input-box');
+		inputBox.simulate('change', { target: { value: currentGuess } });
+
+		expect(mockSetCurrentGuess).toHaveBeenCalledWith(currentGuess);
+	});
+});
