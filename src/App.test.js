@@ -13,7 +13,7 @@ const mockSecretWord = jest.fn();
  * @param {object} state - initial state for this setup
  * @returns {ShallowWrapper}
  */
-const setup = (props = {}, state = null) => {
+const setup = (props = { secretWord: 'party' }, state = null) => {
 	mockSecretWord.mockClear();
 	hookActions.getSecretWord = mockSecretWord;
 
@@ -21,8 +21,11 @@ const setup = (props = {}, state = null) => {
 	// React.useEffect = jest.fn(() => hookActions.getSecretWord());
 	// const wrapper = shallow(<App {...props} />);
 
+	//mockUseReducer
+	React.useReducer = jest.fn().mockReturnValue([ props, jest.fn() ]);
+
 	//this use for mount
-	const wrapper = mount(<App {...props} />);
+	const wrapper = mount(<App />);
 	if (state) wrapper.setState(state);
 	return wrapper;
 };
@@ -47,5 +50,39 @@ describe('getSecretWord called', () => {
 
 		wrapper.update();
 		expect(mockSecretWord).not.toHaveBeenCalled();
+	});
+});
+
+describe('secretWord is not null', () => {
+	let wrapper;
+	beforeEach(() => {
+		wrapper = setup({ secretWord: 'party' });
+	});
+
+	test('renders app component when secretWord is not null', () => {
+		const appComponent = findByTestAttr(wrapper, 'component-app');
+		expect(appComponent.exists()).toBe(true);
+	});
+
+	test('do not render spinner when secretWord is not null', () => {
+		const spinner = findByTestAttr(wrapper, 'spinner');
+		expect(spinner.exists()).toBe(false);
+	});
+});
+
+describe('secretWord is null', () => {
+	let wrapper;
+	beforeEach(() => {
+		wrapper = setup({ secretWord: null });
+	});
+
+	test('do not render app component when secretWord is null', () => {
+		const appComponent = findByTestAttr(wrapper, 'component-app');
+		expect(appComponent.exists()).toBe(false);
+	});
+
+	test('render spinner when secretWord is null', () => {
+		const spinner = findByTestAttr(wrapper, 'spinner');
+		expect(spinner.exists()).toBe(true);
 	});
 });

@@ -4,6 +4,7 @@ import './App.css';
 import Congrats from './Congrats';
 import GuessedWords from './GuessedWords';
 import hookActions from './actions/hookActions';
+import Input from './Input';
 
 /**
  * Reducer to update state, called update state by dispatch
@@ -30,10 +31,22 @@ function App() {
 		hookActions.getSecretWord(setSecretWord);
 	}, []);
 
+	if (!state.secretWord) {
+		return (
+			<div className="container text-center" data-test="spinner">
+				<div className="spinner-border" role="status">
+					<span className="sr-only">Loading...</span>
+				</div>
+				<p>Loading Secret Word</p>
+			</div>
+		);
+	}
+
 	return (
 		<div className="container text-center" data-test="component-app">
 			<h1>Jotto</h1>
 			<Congrats success />
+			<Input secretWord={state.secretWord} />
 			<GuessedWords
 				guessedWords={[
 					{ guessedWord: 'train', letterMatchCount: 3 },
