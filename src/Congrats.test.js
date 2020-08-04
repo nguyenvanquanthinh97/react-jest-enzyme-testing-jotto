@@ -1,8 +1,9 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 
 import { findByTestAttr, checkProps } from './test/utils';
 import Congrats from './Congrats';
+import LanguageContext from './contexts/LanguageContext';
 
 //default props set up for every setup()
 const defaultProps = {
@@ -11,19 +12,34 @@ const defaultProps = {
 
 /**
  * Factory function to create Enzyme ShallowWrapper
- * @param {object} props - Component's props for this setup
- * @param {any} state - Component's initial state for this setup
- * @returns {ShallowWrapper}
+ * @param {object} testValues - Context values specific for this setup
+ * @returns {ReactWrapper}
  */
-export const setup = (props = {}, state = null) => {
-	const setupProps = { ...defaultProps, ...props };
-	const wrapper = shallow(<Congrats {...setupProps} />);
-	if (state) wrapper.setState(state);
-	return wrapper;
+export const setup = ({ success, language }) => {
+	success = success || false;
+	language = language || 'en';
+
+	return mount(
+		<LanguageContext.Provider value={language}>
+			<Congrats success={success} />
+		</LanguageContext.Provider>
+	);
 };
 
+describe('languagePicker', () => {
+	test('correctly render congrats string in english', () => {
+		const wrapper = setup({ success: true });
+		expect(wrapper.text()).toBe('Congratulations! You guessed the word!');
+	});
+
+	test('correctly render exactly string in vietnamese', () => {
+		const wrapper = setup({ success: true, language: 'vi' });
+		expect(wrapper.text()).toBe('Chúc mừng bạn! Bạn đã đoán được từ khóa');
+	});
+});
+
 test('renders without error', () => {
-	const wrapper = setup();
+	const wrapper = setup({});
 	const component = findByTestAttr(wrapper, 'component-congrats');
 	expect(component.length).toBe(1);
 });

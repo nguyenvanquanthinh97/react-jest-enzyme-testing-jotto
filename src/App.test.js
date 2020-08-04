@@ -22,7 +22,7 @@ const setup = (props = { secretWord: 'party' }, state = null) => {
 	// const wrapper = shallow(<App {...props} />);
 
 	//mockUseReducer
-	React.useReducer = jest.fn().mockReturnValue([ props, jest.fn() ]);
+	React.useReducer = jest.fn().mockReturnValue([ { language: 'en', ...props }, jest.fn() ]);
 
 	//this use for mount
 	const wrapper = mount(<App />);
