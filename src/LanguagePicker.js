@@ -5,7 +5,12 @@ const LanguagePicker = ({ setLanguage }) => {
 	const languages = [ { lang: 'en', icon: '🇺🇸' }, { lang: 'vi', icon: '🇻🇳' } ];
 
 	const languageIcons = languages.map((language) => (
-		<span onClick={() => setLanguage(language.lang)} key={language.lang} data-test="language-icon">
+		<span
+			style={{ cursor: 'pointer' }}
+			onClick={() => setLanguage(language.lang)}
+			key={language.lang}
+			data-test="language-icon"
+		>
 			{language.icon}
 		</span>
 	));

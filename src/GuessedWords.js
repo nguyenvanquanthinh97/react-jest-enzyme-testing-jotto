@@ -25,11 +25,11 @@ const GuessedWord = ({ guessedWords }) => {
 		//render table
 		content = (
 			<div data-test="guess-words">
-				<h3>{stringsModule.getStringsByLanguage(language, 'guessColumnHeader')}</h3>
+				<h3>{stringsModule.getStringsByLanguage(language, 'guessedWords')}</h3>
 				<table className="table table-sm">
 					<thead className="thead-light">
 						<tr>
-							<th>{stringsModule.getStringsByLanguage(language, 'guessColumnHeader')}</th>
+							<th>{stringsModule.getStringsByLanguage(language, 'guessedWords')}</th>
 							<th>{stringsModule.getStringsByLanguage(language, 'matchingLettersColumnHeader')}</th>
 						</tr>
 					</thead>
