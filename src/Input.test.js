@@ -1,8 +1,9 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 
 import Input from './Input';
 import { findByTestAttr, checkProps } from './test/utils';
+import LanguageContext from './contexts/LanguageContext';
 
 const defaultProps = {
 	secretWord: 'party'
@@ -10,19 +11,37 @@ const defaultProps = {
 
 /**
  * setup function for App
- * @param {object} props - initial props for this setup
- * @param {object} state - initial state for this setup
- * @returns {ShallowWrapper}
+ * @param {object} testValue - initial context value for this setup
+ * @returns {ReactWrapper}
  */
-const setup = (props = {}, state = null) => {
-	const initialProps = { ...defaultProps, ...props };
-	const wrapper = shallow(<Input {...initialProps} />);
-	if (state) wrapper.setState(state);
-	return wrapper;
+const setup = ({ language, secretWord }) => {
+	language = language || 'en';
+	secretWord = secretWord || 'party';
+
+	return mount(
+		<LanguageContext.Provider value={language}>
+			<Input secretWord={secretWord} />
+		</LanguageContext.Provider>
+	);
 };
 
+describe('languagePicker', () => {
+	test('correctly render submit button text in english', () => {
+		const wrapper = setup({});
+
+		const submitButton = findByTestAttr(wrapper, 'submit-button');
+		expect(submitButton.text()).toBe('Submit');
+	});
+	test('correctly render submit button text in vietnamese', () => {
+		const wrapper = setup({ language: 'vi' });
+
+		const submitButton = findByTestAttr(wrapper, 'submit-button');
+		expect(submitButton.text()).toBe('Đoán');
+	});
+});
+
 test('render App without errors', () => {
-	const wrapper = setup();
+	const wrapper = setup({});
 	const component = findByTestAttr(wrapper, 'component-input');
 	expect(component.length).toBe(1);
 });
@@ -41,7 +60,7 @@ describe('state control input field', () => {
 		mockSetCurrentGuess.mockClear();
 		React.useState = jest.fn(() => [ '', mockSetCurrentGuess ]);
 
-		wrapper = setup();
+		wrapper = setup({});
 	});
 
 	test('state updates with value of input box change with `setCurrentGuess`', () => {

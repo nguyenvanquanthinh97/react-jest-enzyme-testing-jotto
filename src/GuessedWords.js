@@ -1,10 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import LanguageContext from './contexts/LanguageContext';
+import stringsModule from './helpers/strings';
+
 const GuessedWord = ({ guessedWords }) => {
 	let content;
+	const language = React.useContext(LanguageContext);
 	if (guessedWords.length === 0) {
-		content = <div data-test="guess-instructions">'Try to guess a secret word !'</div>;
+		content = (
+			<div data-test="guess-instructions">{stringsModule.getStringsByLanguage(language, 'guessPrompt')}</div>
+		);
 	} else {
 		//render each guessedWord element into each table row
 		const guessedWordNodes = guessedWords.map(({ guessedWord, letterMatchCount }, idx) => {
@@ -19,12 +25,12 @@ const GuessedWord = ({ guessedWords }) => {
 		//render table
 		content = (
 			<div data-test="guess-words">
-				<h3>Guess Words</h3>
+				<h3>{stringsModule.getStringsByLanguage(language, 'guessColumnHeader')}</h3>
 				<table className="table table-sm">
 					<thead className="thead-light">
 						<tr>
-							<th>Guessed Words</th>
-							<th>Letter Match Count</th>
+							<th>{stringsModule.getStringsByLanguage(language, 'guessColumnHeader')}</th>
+							<th>{stringsModule.getStringsByLanguage(language, 'matchingLettersColumnHeader')}</th>
 						</tr>
 					</thead>
 					<tbody>{guessedWordNodes}</tbody>

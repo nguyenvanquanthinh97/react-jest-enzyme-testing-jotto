@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 import { findByTestAttr, checkProps } from './test/utils';
 
 import GuessedWord from './GuessedWords';
+import stringsModule from './helpers/strings';
 
 const defaultProps = {
 	guessedWords: [ { guessedWord: 'train', letterMatchCount: 3 } ]
@@ -12,7 +13,7 @@ const defaultProps = {
  * Factory function to create Enzyme ShallowWrapper
  * @param {object} props - Component's props for this setup
  * @param {any} state - Component's initial state for this setup
- * @returns {ShallowWrapper}
+ * @returns {ReactWrapper}
  */
 export const setup = (props = {}, state = null) => {
 	const setupProps = { ...defaultProps, ...props };
@@ -27,8 +28,13 @@ test('does not throw error warning with appropriate props', () => {
 
 describe('tests if there are no words guessed', () => {
 	let wrapper;
+	const normalUseContext = React.useContext;
 	beforeEach(() => {
+		React.useContext = jest.fn().mockReturnValue('en');
 		wrapper = setup({ guessedWords: [] });
+	});
+	afterEach(() => {
+		React.useContext = normalUseContext;
 	});
 	test('renders without error', () => {
 		const component = findByTestAttr(wrapper, 'component-guessed-words');
@@ -47,9 +53,15 @@ describe('tests if there are words guessed', () => {
 		{ guessedWord: 'agile', letterMatchCount: 2 },
 		{ guessedWord: 'party', letterMatchCount: 5 }
 	];
+	const normalUseContext = React.useContext;
 
 	beforeEach(() => {
+		React.useContext = jest.fn().mockReturnValue('en');
 		wrapper = setup({ guessedWords });
+	});
+
+	afterEach(() => {
+		React.useContext = normalUseContext;
 	});
 
 	test('renders without error', () => {
@@ -63,5 +75,27 @@ describe('tests if there are words guessed', () => {
 	test('correct number of guessed words', () => {
 		const guessWordNodes = findByTestAttr(wrapper, 'guess-word');
 		expect(guessWordNodes.length).toBe(guessedWords.length);
+	});
+});
+
+describe('languagePicker', () => {
+	const normalUseContext = React.useContext;
+	afterEach(() => {
+		React.useContext = normalUseContext;
+	});
+	test('render correctly instruction in english', () => {
+		React.useContext = jest.fn().mockReturnValue('en');
+		const wrapper = setup({ guessedWords: [] });
+		const guessInstructions = findByTestAttr(wrapper, 'guess-instructions');
+
+		expect(guessInstructions.text()).toBe('Try to guess the secret word!');
+	});
+
+	test('render instruction correctly in vietnamese', () => {
+		React.useContext = jest.fn().mockReturnValue('vi');
+		const wrapper = setup({ guessedWords: [] });
+		const guessInstructions = findByTestAttr(wrapper, 'guess-instructions');
+
+		expect(guessInstructions.text()).toBe('Cố gắng đoán từ khóa đi nào');
 	});
 });
