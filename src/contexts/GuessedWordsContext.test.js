@@ -9,7 +9,7 @@ const FunctionComponent = () => {
 };
 
 test('useSuccess throw error when not wrapped in Provider', () => {
-	expect(() => shallow(<FunctionComponent />)).toThrow('GuessedWords must be used within a SuccessProvider');
+	expect(() => shallow(<FunctionComponent />)).toThrow('GuessedWords must be used within a GuessedWordsProvider');
 });
 
 test('useSucess not throw error when wrapped in Provider', () => {

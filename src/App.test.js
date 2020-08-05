@@ -13,7 +13,7 @@ const mockSecretWord = jest.fn();
  * @param {object} state - initial state for this setup
  * @returns {ShallowWrapper}
  */
-const setup = (props = { secretWord: 'party' }, state = null) => {
+const setup = (props = { secretWord: 'party', guessedWords: [] }, state = null) => {
 	mockSecretWord.mockClear();
 	hookActions.getSecretWord = mockSecretWord;
 

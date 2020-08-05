@@ -4,6 +4,7 @@ import { findByTestAttr, checkProps } from './test/utils';
 
 import GuessedWord from './GuessedWords';
 import stringsModule from './helpers/strings';
+import GuessedWordsContext from './contexts/GuessedWordsContext';
 
 const defaultProps = {
 	guessedWords: [ { guessedWord: 'train', letterMatchCount: 3 } ]
@@ -15,11 +16,10 @@ const defaultProps = {
  * @param {any} state - Component's initial state for this setup
  * @returns {ReactWrapper}
  */
-export const setup = (props = {}, state = null) => {
-	const setupProps = { ...defaultProps, ...props };
-	const wrapper = shallow(<GuessedWord {...setupProps} />);
-	if (state) wrapper.setState(state);
-	return wrapper;
+export const setup = ({ guessedWords }) => {
+	guessedWords = guessedWords || [];
+	GuessedWordsContext.useGuessedWords = jest.fn().mockReturnValue([ guessedWords, jest.fn() ]);
+	return shallow(<GuessedWord />);
 };
 
 test('does not throw error warning with appropriate props', () => {

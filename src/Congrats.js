@@ -1,14 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import LanguageContext from './contexts/LanguageContext';
+import SuccessContext from './contexts/SuccessContext';
 import stringsHelper from './helpers/strings';
 /**
  * Functional React Component to render congrats message
  * @function
  * @return {JSX.Element} - Rendered Component (or null if 'success' props is false)
  */
-const Congrats = ({ success }) => {
+const Congrats = () => {
+	const [ success ] = SuccessContext.useSuccess();
 	const language = React.useContext(LanguageContext);
 	let content, classNames;
 	if (success) {
@@ -20,10 +21,6 @@ const Congrats = ({ success }) => {
 			<div data-test="congrats-message">{content}</div>
 		</div>
 	);
-};
-
-Congrats.propTypes = {
-	success: PropTypes.bool.isRequired
 };
 
 export default Congrats;

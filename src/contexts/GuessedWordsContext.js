@@ -9,7 +9,7 @@ const GuessedWordsContext = React.createContext();
 const useGuessedWords = () => {
 	const GuessedWords = React.useContext(GuessedWordsContext);
 
-	if (!GuessedWords) throw new Error('GuessedWords must be used within a SuccessProvider');
+	if (!GuessedWords) throw new Error('GuessedWords must be used within a GuessedWordsProvider');
 	return GuessedWords;
 };
 
@@ -17,7 +17,7 @@ const GuessedWordsProvider = (props) => {
 	const [ guessedWords, setGuessedWords ] = React.useState([]);
 
 	const context = React.useMemo(() => [ guessedWords, setGuessedWords ], [ guessedWords ]);
-	return <GuessedWordsContext.Provider value={guessedWords} {...props} />;
+	return <GuessedWordsContext.Provider value={context} {...props} />;
 };
 
 export default { useGuessedWords, GuessedWordsProvider };
