@@ -5,7 +5,7 @@ import LanguageContext from './contexts/LanguageContext';
 import SuccessContext from './contexts/SuccessContext';
 import stringsModule from './helpers/strings';
 
-const Input = (props) => {
+const Input = ({ secretWord }) => {
 	const [ currentGuess, setCurrentGuess ] = React.useState('');
 	const language = React.useContext(LanguageContext);
 	const [ success, setSuccess ] = SuccessContext.useSuccess();
@@ -15,6 +15,10 @@ const Input = (props) => {
 
 		//	TODO: invoke guessWord to optionally update `success`
 		//	TODO: update `guessedWords` context
+		if (currentGuess === secretWord) {
+			setSuccess(true);
+		}
+		//clear input
 		setCurrentGuess('');
 	};
 
