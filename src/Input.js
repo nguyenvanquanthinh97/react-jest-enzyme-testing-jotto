@@ -2,11 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import LanguageContext from './contexts/LanguageContext';
+import SuccessContext from './contexts/SuccessContext';
 import stringsModule from './helpers/strings';
 
 const Input = (props) => {
 	const [ currentGuess, setCurrentGuess ] = React.useState('');
 	const language = React.useContext(LanguageContext);
+	const [ success, setSuccess ] = SuccessContext.useSuccess();
 
 	const onFormSubmitClick = (e) => {
 		e.preventDefault();
@@ -15,6 +17,8 @@ const Input = (props) => {
 		//	TODO: update `guessedWords` context
 		setCurrentGuess('');
 	};
+
+	if (success) return null;
 
 	return (
 		<div data-test="component-input">
