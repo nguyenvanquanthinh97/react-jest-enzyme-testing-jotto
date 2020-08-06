@@ -3,21 +3,26 @@ import PropTypes from 'prop-types';
 
 import LanguageContext from './contexts/LanguageContext';
 import SuccessContext from './contexts/SuccessContext';
+import GuessedWords from './contexts/GuessedWordsContext';
 import stringsModule from './helpers/strings';
+import { getLetterMatchCount } from './helpers';
 
 const Input = ({ secretWord }) => {
 	const [ currentGuess, setCurrentGuess ] = React.useState('');
 	const language = React.useContext(LanguageContext);
 	const [ success, setSuccess ] = SuccessContext.useSuccess();
+	const [ guessedWords, setGuessedWords ] = GuessedWords.useGuessedWords();
 
 	const onFormSubmitClick = (e) => {
 		e.preventDefault();
 
-		//	TODO: invoke guessWord to optionally update `success`
-		//	TODO: update `guessedWords` context
+		//invoke guessWord to optionally update `success`
 		if (currentGuess === secretWord) {
 			setSuccess(true);
 		}
+		//update `guessedWords` context
+		const letterMatchCount = getLetterMatchCount(currentGuess, secretWord);
+		setGuessedWords([ ...guessedWords, { guessedWord: currentGuess, letterMatchCount } ]);
 		//clear input
 		setCurrentGuess('');
 	};
