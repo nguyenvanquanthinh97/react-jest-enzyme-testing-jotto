@@ -53,6 +53,7 @@ function App() {
 
 	return (
 		<div className="container text-center" data-test="component-app">
+			<div>{state.secretWord}</div>
 			<h1>Jotto</h1>
 			<LanguageContext.Provider value={state.language}>
 				<LanguagePicker setLanguage={setLanguage} />
